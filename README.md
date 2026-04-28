@@ -1,4 +1,4 @@
-# 臺灣七日天氣預報儀表板 (Taiwan 7-Day Weather Forecast Dashboard)
+# 臺灣七日天氣預報
 
 這是一個基於 Python 與 Streamlit 開發的互動式全端應用程式，旨在透過中央氣象署 (CWA) 的開放資料 API 自動獲取天氣預報、將資料持久化儲存於 SQLite 資料庫，並透過網頁儀表板展示全台各分區的氣象走勢。
 
