@@ -495,6 +495,7 @@ def main():
         st.stop()
 
     all_regions = sorted(df["regionName"].unique().tolist())
+    all_dates = sorted(df["dataDate"].dt.strftime("%Y-%m-%d").unique().tolist())
 
     # ── KPI strip ─────────────────────────────────────────────────────────────
     st.markdown('<div class="divider"></div>', unsafe_allow_html=True)
@@ -553,11 +554,31 @@ def main():
             '</div>',
             unsafe_allow_html=True,
         )
+        
+        # Date selector for map
+        map_date = st.selectbox(
+            "選擇地圖日期",
+            options=all_dates,
+            index=0,
+            label_visibility="visible",
+        )
+        
         st.markdown(
             '<div class="map-hint">💡 點擊地圖標記，查看該地區的詳細氣溫資訊</div>',
             unsafe_allow_html=True,
         )
-        taiwan_map = build_taiwan_map(latest)
+        
+        # Filter data for the selected date
+        df_map = df[df["dataDate"].dt.strftime("%Y-%m-%d") == map_date]
+        map_data_dict = {}
+        for _, row in df_map.iterrows():
+            map_data_dict[row["regionName"]] = {
+                "mint": row["mint"],
+                "maxt": row["maxt"],
+                "date": map_date,
+            }
+            
+        taiwan_map = build_taiwan_map(map_data_dict)
         with st.container():
             st_folium(taiwan_map, width="100%", height=490, returned_objects=[])
 
